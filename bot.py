@@ -14,9 +14,9 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
 
-# === МОДЕЛИ ===
+# === МОДЕЛИ (Llama заменена на DeepSeek, так как она теперь платная) ===
 MODELS = {
-    "llama": "meta-llama/llama-3.3-70b-instruct:free",
+    "llama": "deepseek/deepseek-r1:free",
     "gemini": "google/gemini-2.0-flash-lite-preview-02-05:free",
     "deepseek": "deepseek/deepseek-r1:free"
 }
@@ -44,7 +44,7 @@ async def cmd_start(message: types.Message):
 @dp.message(Command("model"))
 async def cmd_model(message: types.Message):
     buttons = [
-        [InlineKeyboardButton(text="🦙 Llama 3.3 (Для кода)", callback_data="model_llama")],
+        [InlineKeyboardButton(text="🦙 Llama 3.3", callback_data="model_llama")],
         [InlineKeyboardButton(text="✨ Gemini (Универсал)", callback_data="model_gemini")],
         [InlineKeyboardButton(text="🧠 DeepSeek (Для логики)", callback_data="model_deepseek")]
     ]
@@ -106,7 +106,7 @@ async def handle_message(message: types.Message):
         await message.answer(f"❌ Ошибка: {str(e)}")
 
 
-# === ФЕЙКОВЫЙ ВЕБ-СЕРВЕР (чтобы Render не убивал бота) ===
+# === ВЕБ-СЕРВЕР ДЛЯ RENDER ===
 async def web_server():
     app = web.Application()
     app.router.add_get("/", lambda r: web.Response(text="Bot is running!"))
@@ -119,13 +119,9 @@ async def web_server():
     print(f"✅ Веб-сервер запущен на порту {port}")
 
 async def main():
-    # 1. Запускаем веб-сервер в фоне
     asyncio.create_task(web_server())
-    
-    # 2. Даем серверу 2 секунды, чтобы открыть порт
     await asyncio.sleep(2) 
     
-    # 3. Запускаем самого бота
     print("🚀 Бот Nexus_AI запущен...")
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
