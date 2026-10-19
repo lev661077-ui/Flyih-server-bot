@@ -23,10 +23,11 @@ client = AsyncOpenAI(
 # === МОДЕЛИ ===
 # Обрати внимание: у OpenRouter названия моделей могут быть с :free или без
 MODELS = {
-    "llama": "meta-llama/llama-3.1-8b-instruct:free",
-    "gemini": "google/gemini-2.0-flash-lite-preview-02-05:free",
-    "deepseek": "deepseek/deepseek-r1:free"
+    "llama": "meta-llama/llama-3-8b-instruct:free", 
+    "gemini": "google/gemma-2-9b-it:free", 
+    "deepseek": "mistralai/mistral-7b-instruct:free" 
 }
+    
 
 user_models = {} 
 
